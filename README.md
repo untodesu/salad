@@ -3,7 +3,7 @@
 
 SALAD is an OpenAL loader library which is made specifically to avoid _any_ licensing issues caused by OpenAL-soft being licensed under LGPL.  
 
-SALAD named after [GLAD](https://github.com/Dav1dde/glad) just becase I thought it would be funny.  
+SALAD is named after [GLAD](https://github.com/Dav1dde/glad) just becase I thought it would be funny.  
 
 ## Usage
 In order to use SALAD you need a working C99 compiler (with extensions (Visual C/C++ and GNU extensions are supported)).
