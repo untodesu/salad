@@ -1,5 +1,5 @@
 # SALAD
-> Nice hustle, tons-o-fun! Next time, eat a salad!
+> _Nice hustle, tons-o-fun! Next time, eat a salad!_
 
 SALAD is an OpenAL loader library which is made specifically to avoid _any_ licensing issues caused by OpenAL-soft being licensed under LGPL.  
 
@@ -17,7 +17,7 @@ You can just copy files in yours source tree, then add `salad.c` as a source and
 5. `target_link_libraries(my_game salad)`
 
 ## Licensing
-I wrote all the headers (myself with a bit of help from regular expressions) based on OpenAL-soft ones but using SALAD's header. So the entirety of this repo is licensed under Simplified BSD license (see [LICENSE](blob/master/LICENSE) for details).
+I wrote all the headers (myself with a bit of help from regular expressions) based on OpenAL-soft ones but using SALAD's header. So the entirety of this repo is licensed under Simplified BSD license (see [LICENSE](LICENSE) for details).
 
 ## Abstract examples
 #### Generic C example
