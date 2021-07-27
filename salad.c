@@ -37,7 +37,7 @@
 #define WIN32_LEAN_AND_MEAN 1
 #include <Windows.h>
 
-#define OPENAL_LIBNAME "OpenAL32.lib"
+#define OPENAL_LIBNAME "OpenAL32.dll"
 
 static void *win32_loadfunc(const char *procname, void *arg)
 {
