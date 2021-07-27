@@ -24,7 +24,6 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#define _USE_MATH_DEFINES 
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/salad.h>
@@ -39,26 +38,28 @@
 
 int main(void)
 {
+    ALCdevice *device;
+    ALCcontext *context;
+    ALshort data[BUF_SIZE * 2];
+    ALuint buffer, source;
+
     if(!saladLoadAL()) {
         printf("Error loading AL functions!\n");
         return 1;
     }
 
-    ALCdevice *device = alcOpenDevice(NULL);
-    ALCcontext *context = alcCreateContext(device, NULL);
+    device = alcOpenDevice(NULL);
+    context = alcCreateContext(device, NULL);
     alcMakeContextCurrent(context);
 
-    ALshort data[BUF_SIZE * 2] = { 0 };
     for(int i = 0; i < BUF_SIZE; i++) {
-        data[i * 2 + 0] = (ALshort)(sin(2.0 * M_PI * SINE_FREQ * i / BUF_SIZE) * SHRT_MAX);
-        data[i * 2 + 1] = (ALshort)(sin(2.0 * M_PI * SINE_FREQ * i / BUF_SIZE) * SHRT_MAX) * -1;
+        data[i * 2 + 0] = (ALshort)(sin(2.0 * 3.1415 * SINE_FREQ * i / BUF_SIZE) * SHRT_MAX);
+        data[i * 2 + 1] = (ALshort)(sin(2.0 * 3.1415 * SINE_FREQ * i / BUF_SIZE) * SHRT_MAX) * -1;
     }
 
-    ALuint buffer;
     alGenBuffers(1, &buffer);
     alBufferData(buffer, AL_FORMAT_STEREO16, data, sizeof(data), BUF_SIZE * 2);
 
-    ALuint source;
     alGenSources(1, &source);
     alSourcei(source, AL_BUFFER, buffer);
     alSourcei(source, AL_LOOPING, AL_TRUE);

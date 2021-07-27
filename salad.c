@@ -29,41 +29,38 @@
 #include <AL/salad.h>
 #include <stddef.h>
 
-#if defined(_WIN32)
-#define IS_WIN32 1
-#elif defined(__unix__) || (defined (__APPLE__) && defined (__MACH__))
-#define IS_POSIX 1
+#if defined(__unix__) || (defined(__APPLE__) && defined(__MACH__))
+#define _POSIX 1
 #endif
 
-#if defined(IS_WIN32)
-    #define WIN32_LEAN_AND_MEAN 1
-    #include <Windows.h>
+#if defined(_WIN32)
+#define WIN32_LEAN_AND_MEAN 1
+#include <Windows.h>
 
-    static void *WIN32_loadfunc(const char *procname, void *arg)
-    {
-        HMODULE hModule = (HMODULE)arg;
-        if(hModule)
-            return GetProcAddress(hModule, procname);
-        return NULL;
-    }
-#elif defined(IS_POSIX)
-    #include <dlfcn.h>
+#define OPENAL_LIBNAME "OpenAL32.lib"
 
-    #if defined(__linux__)
-        #define AL_LIBNAME "libopenal.so"
-    #elif defined(__APPLE__)
-        #define AL_LIBNAME "libopenal.dylib"
-    #else
-        // we are doomed!!!!!
-        #define AL_LIBNAME "libopenal"
-    #endif
+static void *win32_loadfunc(const char *procname, void *arg)
+{
+    HMODULE hModule;
+    if((hModule = (HMODULE)arg))
+        return GetProcAddress(hModule, procname);
+    return NULL;
+}
+#elif defined(_POSIX)
+#include <dlfcn.h>
 
-    static void *POSIX_loadfunc(const char *procname, void *arg)
-    {
-        if(arg)
-            return dlsym(arg, procname);
-        return NULL;
-    }
+#if defined(__APPLE__)
+#define OPENAL_LIBNAME "libopenal.dylib"
+#else
+#define OPENAL_LIBNAME "libopenal.so"
+#endif
+
+static void *posix_loadfunc(const char *procname, void *arg)
+{
+    if(arg)
+        return dlsym(arg, procname);
+    return NULL;
+}
 #endif
 
 PFN_alEnable SALAD_alEnable = NULL;
@@ -159,19 +156,19 @@ PFN_alcCaptureSamples SALAD_alcCaptureSamples = NULL;
 
 int saladLoadAL(void)
 {
-    #if defined(IS_WIN32)
-        HMODULE hModule = LoadLibraryA("OpenAL32.dll");
-        if(hModule)
-            return saladLoadALFunc(WIN32_loadfunc, (void *)hModule);
-        return 0;
-    #elif defined(IS_POSIX)
-        void *dl = dlopen(AL_LIBNAME, RTLD_NOW);
-        if(dl)
-            return saladLoadALFunc(POSIX_loadfunc, dl);
-        return 0;
-    #else
-        return 0;
-    #endif
+    void *module;
+
+#if defined(_WIN32)
+    if((module = (void *)LoadLibraryA(OPENAL_LIBNAME)))
+        return saladLoadALFunc(win32_loadfunc, module);
+    return 0;
+#elif defined(_POSIX)
+    if((module = dlopen(OPENAL_LIBNAME, RTLD_LAZY)))
+        return saladLoadALFunc(posix_loadfunc, module);
+    return 0;
+#endif
+
+    return 0;
 }
 
 int saladLoadALFunc(SALAD_loadfunc_t loadfunc, void *arg)

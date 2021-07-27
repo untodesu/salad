@@ -28,19 +28,41 @@
 #define AL_SALAD_H 1
 
 #if defined(_MSC_VER)
-    #define SALAD_APIENTRY __cdecl
-    #define SALAD_ALX_APIENTRY __cdecl
-    #define SALAD_ALX_API __declspec(dllimport)
+#define SALAD_APIENTRY __cdecl
+#define SALAD_ALX_APIENTRY __cdecl
+#define SALAD_ALX_API __declspec(dllimport)
 #else
-    #define SALAD_APIENTRY
-    #define SALAD_ALX_APIENTRY
-    #define SALAD_ALX_API
+#define SALAD_APIENTRY
+#define SALAD_ALX_APIENTRY
+#define SALAD_ALX_API
 #endif
 
 #if defined(__cplusplus)
-    #define SALAD_EXTERN extern "C"
+#define SALAD_EXTERN extern "C"
 #else
-    #define SALAD_EXTERN extern
+#define SALAD_EXTERN extern
+#endif
+
+typedef float               salad_float32_t;
+typedef double              salad_float64_t;
+typedef signed char         salad_int8_t;
+typedef signed short        salad_int16_t;
+typedef unsigned char       salad_uint8_t;
+typedef unsigned short      salad_uint16_t;
+#if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || defined(__GNUC__)
+#include <stdint.h>
+typedef int32_t             salad_int32_t;
+typedef uint32_t            salad_uint32_t;
+#elif defined(__cplusplus) && __cplusplus >= 199711L
+#include <cstdint>
+typedef std::int32_t        salad_int32_t;
+typedef std::uint32_t       salad_uint32_t;
+#elif defined(_WIN32)
+typedef __int32             salad_int32_t;
+typedef unsigned __int32    salad_uint32_t;
+#else
+typedef int                 salad_int32_t;
+typedef unsigned int        salad_uint32_t;
 #endif
 
 /**

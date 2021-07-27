@@ -43,19 +43,19 @@ struct ALCcontext;
 typedef struct ALCdevice ALCdevice;
 typedef struct ALCcontext ALCcontext;
 
-typedef char        ALCboolean;
-typedef char        ALCchar;
-typedef double      ALCdouble;
-typedef float       ALCfloat;
-typedef int16_t     ALCshort;
-typedef int32_t     ALCint;
-typedef int32_t     ALCsizei;
-typedef int8_t      ALCbyte;
-typedef uint16_t    ALCushort;
-typedef uint32_t    ALCenum;
-typedef uint32_t    ALCuint;
-typedef uint8_t     ALCubyte;
-typedef void        ALCvoid;
+typedef salad_uint8_t   ALCboolean;
+typedef char            ALCchar;
+typedef salad_float64_t ALCdouble;
+typedef salad_float32_t ALCfloat;
+typedef salad_int16_t   ALCshort;
+typedef salad_int32_t   ALCint;
+typedef salad_int32_t   ALCsizei;
+typedef salad_int8_t    ALCbyte;
+typedef salad_uint16_t  ALCushort;
+typedef salad_uint32_t  ALCenum;
+typedef salad_uint32_t  ALCuint;
+typedef salad_uint8_t   ALCubyte;
+typedef void            ALCvoid;
 
 #define ALC_INVALID                             0
 #define ALC_FALSE                               0

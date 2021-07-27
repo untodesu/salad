@@ -4,9 +4,6 @@ project(salad LANGUAGES C VERSION 0.0.1)
 option(SALAD_PARANOID "Paranoid function retreiving" ON)
 option(SALAD_EXAMPLES "Build examples" ON)
 
-set(CMAKE_C_STANDARD 99)
-set(CMAKE_C_STANDARD_REQUIRED ON)
-
 add_library(salad STATIC
     "${CMAKE_CURRENT_LIST_DIR}/include/AL/al.h"
     "${CMAKE_CURRENT_LIST_DIR}/include/AL/alc.h"
@@ -25,10 +22,6 @@ if(UNIX AND NOT APPLE)
 endif()
 
 if(SALAD_EXAMPLES)
-    message("-- Building SALAD examples")
-    function(add_salad_example target)
-        add_executable(${target} "${CMAKE_CURRENT_LIST_DIR}/examples/${target}.c")
-        target_link_libraries(${target} salad)
-    endfunction()
-    add_salad_example(sine)
+    message("-- Building salad examples")
+    add_subdirectory(examples)
 endif()

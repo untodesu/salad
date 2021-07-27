@@ -39,19 +39,19 @@
 #define AL_VERSION_1_0 1
 #define AL_VERSION_1_1 1
 
-typedef char        ALboolean;
-typedef char        ALchar;
-typedef double      ALdouble;
-typedef float       ALfloat;
-typedef int16_t     ALshort;
-typedef int32_t     ALint;
-typedef int32_t     ALsizei;
-typedef int8_t      ALbyte;
-typedef uint16_t    ALushort;
-typedef uint32_t    ALenum;
-typedef uint32_t    ALuint;
-typedef uint8_t     ALubyte;
-typedef void        ALvoid;
+typedef salad_uint8_t   ALboolean;
+typedef char            ALchar;
+typedef salad_float64_t ALdouble;
+typedef salad_float32_t ALfloat;
+typedef salad_int16_t   ALshort;
+typedef salad_int32_t   ALint;
+typedef salad_int32_t   ALsizei;
+typedef salad_int8_t    ALbyte;
+typedef salad_uint16_t  ALushort;
+typedef salad_uint32_t  ALenum;
+typedef salad_uint32_t  ALuint;
+typedef salad_uint8_t   ALubyte;
+typedef void            ALvoid;
 
 #define AL_INVALID                      0xFFFFFFFF
 #define AL_NONE                         0

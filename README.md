@@ -6,15 +6,17 @@ SALAD is an OpenAL loader library which is made specifically to avoid _any_ lice
 SALAD is named after [GLAD](https://github.com/Dav1dde/glad) just because I thought it would be funny.  
 
 ## Usage
-In order to use SALAD you need a working C99 compiler (with extensions (Visual C/C++ and GNU extensions are supported)).
+In order to use SALAD you need a working ANSI C compiler with extensions (Visual C/C++ and GNU C extensions are supported so far).
+
 #### Via copying files
 You can just copy files in yours source tree, then add `salad.c` as a source and append a new directory to the include path.
+
 #### Via CMake and Git submodules
 1. `git submodule add https://github.com/undnull/salad.git`
 2. `add_subdirectory(salad)`
 3. OPTIONAL: `set(SALAD_PARANOID OFF CACHE BOOL "" FORCE)`
 4. OPTIONAL: `set(SALAD_EXAMPLES OFF CACHE BOOL "" FORCE)`
-5. `target_link_libraries(my_game salad)`
+5. `target_link_libraries(my_engine salad)`
 
 ## Licensing
 I wrote all the headers (myself with a bit of help from regular expressions) based on OpenAL-soft ones but using SALAD's header. So the entirety of this repo is licensed under Simplified BSD license (see [LICENSE](LICENSE) for details).
