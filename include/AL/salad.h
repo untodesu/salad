@@ -53,7 +53,7 @@ typedef unsigned short      salad_uint16_t;
 #include <stdint.h>
 typedef int32_t             salad_int32_t;
 typedef uint32_t            salad_uint32_t;
-#elif defined(__cplusplus) && __cplusplus >= 199711L
+#elif defined(__cplusplus) && __cplusplus >= 201103L
 #include <cstdint>
 typedef std::int32_t        salad_int32_t;
 typedef std::uint32_t       salad_uint32_t;
