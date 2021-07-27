@@ -26,6 +26,7 @@
  */
 #include <AL/al.h>
 #include <AL/alc.h>
+#include <AL/efx.h>
 #include <AL/salad.h>
 #include <stddef.h>
 
@@ -154,6 +155,29 @@ PFN_alcCaptureStart SALAD_alcCaptureStart = NULL;
 PFN_alcCaptureStop SALAD_alcCaptureStop = NULL;
 PFN_alcCaptureSamples SALAD_alcCaptureSamples = NULL;
 
+PFN_alGenEffects SALAD_alGenEffects = NULL;
+PFN_alDeleteEffects SALAD_alDeleteEffects = NULL;
+PFN_alIsEffect SALAD_alIsEffect = NULL;
+PFN_alEffecti SALAD_alEffecti = NULL; 
+PFN_alEffectiv SALAD_alEffectiv = NULL; 
+PFN_alEffectf SALAD_alEffectf = NULL; 
+PFN_alEffectfv SALAD_alEffectfv = NULL; 
+PFN_alGetEffecti SALAD_alGetEffecti = NULL;
+PFN_alGetEffectiv SALAD_alGetEffectiv = NULL;
+PFN_alGetEffectf SALAD_alGetEffectf = NULL;
+PFN_alGetEffectfv SALAD_alGetEffectfv = NULL;
+PFN_alGenFilters SALAD_alGenFilters = NULL; 
+PFN_alDeleteFilters SALAD_alDeleteFilters = NULL;
+PFN_alIsFilter SALAD_alIsFilter = NULL;
+PFN_alFilteri SALAD_alFilteri = NULL; 
+PFN_alFilteriv SALAD_alFilteriv = NULL; 
+PFN_alFilterf SALAD_alFilterf = NULL; 
+PFN_alFilterfv SALAD_alFilterfv = NULL; 
+PFN_alGetFilteri SALAD_alGetFilteri = NULL;
+PFN_alGetFilteriv SALAD_alGetFilteriv = NULL;
+PFN_alGetFilterf SALAD_alGetFilterf = NULL;
+PFN_alGetFilterfv SALAD_alGetFilterfv = NULL;
+
 int saladLoadAL(void)
 {
     void *module;
@@ -176,6 +200,7 @@ int saladLoadALFunc(SALAD_loadfunc_t loadfunc, void *arg)
     if(!loadfunc)
         return 0;
 
+    /* OpenAL functions */
     SALAD_alEnable = loadfunc("alEnable", arg);
     SALAD_alDisable = loadfunc("alDisable", arg);
     SALAD_alIsEnabled = loadfunc("alIsEnabled", arg);
@@ -246,6 +271,7 @@ int saladLoadALFunc(SALAD_loadfunc_t loadfunc, void *arg)
     SALAD_alGetBuffer3i = loadfunc("alGetBuffer3i", arg);
     SALAD_alGetBufferiv = loadfunc("alGetBufferiv", arg);
 
+    /* OpenAL context functions */
     SALAD_alcCreateContext = loadfunc("alcCreateContext", arg);
     SALAD_alcMakeContextCurrent = loadfunc("alcMakeContextCurrent", arg);
     SALAD_alcProcessContext = loadfunc("alcProcessContext", arg);
@@ -266,6 +292,32 @@ int saladLoadALFunc(SALAD_loadfunc_t loadfunc, void *arg)
     SALAD_alcCaptureStart = loadfunc("alcCaptureStart", arg);
     SALAD_alcCaptureStop = loadfunc("alcCaptureStop", arg);
     SALAD_alcCaptureSamples = loadfunc("alcCaptureSamples", arg);
+
+    /* ALC_EXT_EFX functions */
+    /* These functions are NOT checked if SALAD_PARANOID is defined
+     * because extension presence checking is on user code */
+    SALAD_alGenEffects = loadfunc("alGenEffects", arg);
+    SALAD_alDeleteEffects = loadfunc("alDeleteEffects", arg);
+    SALAD_alIsEffect = loadfunc("alIsEffect", arg);
+    SALAD_alEffecti = loadfunc("alEffecti", arg); 
+    SALAD_alEffectiv = loadfunc("alEffectiv", arg); 
+    SALAD_alEffectf = loadfunc("alEffectf", arg); 
+    SALAD_alEffectfv = loadfunc("alEffectfv", arg); 
+    SALAD_alGetEffecti = loadfunc("alGetEffecti", arg);
+    SALAD_alGetEffectiv = loadfunc("alGetEffectiv", arg);
+    SALAD_alGetEffectf = loadfunc("alGetEffectf", arg);
+    SALAD_alGetEffectfv = loadfunc("alGetEffectfv", arg);
+    SALAD_alGenFilters = loadfunc("alGenFilters", arg); 
+    SALAD_alDeleteFilters = loadfunc("alDeleteFilters", arg);
+    SALAD_alIsFilter = loadfunc("alIsFilter", arg);
+    SALAD_alFilteri = loadfunc("alFilteri", arg); 
+    SALAD_alFilteriv = loadfunc("alFilteriv", arg); 
+    SALAD_alFilterf = loadfunc("alFilterf", arg); 
+    SALAD_alFilterfv = loadfunc("alFilterfv", arg); 
+    SALAD_alGetFilteri = loadfunc("alGetFilteri", arg);
+    SALAD_alGetFilteriv = loadfunc("alGetFilteriv", arg);
+    SALAD_alGetFilterf = loadfunc("alGetFilterf", arg);
+    SALAD_alGetFilterfv = loadfunc("alGetFilterfv", arg);
 
 #if defined(SALAD_PARANOID)
     if(!SALAD_alEnable)
