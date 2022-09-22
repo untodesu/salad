@@ -40,11 +40,11 @@
 
 #define OPENAL_LIBNAME "OpenAL32.dll"
 
-static void *win32_loadfunc(const char *procname, void *arg)
+static SALAD_func_t win32_loadfunc(const char *procname, void *arg)
 {
     HMODULE hModule;
     if((hModule = (HMODULE)arg))
-        return GetProcAddress(hModule, procname);
+        return (SALAD_func_t)GetProcAddress(hModule, procname);
     return NULL;
 }
 #elif defined(_POSIX)
@@ -56,10 +56,11 @@ static void *win32_loadfunc(const char *procname, void *arg)
 #define OPENAL_LIBNAME "libopenal.so"
 #endif
 
-static void *posix_loadfunc(const char *procname, void *arg)
+static SALAD_func_t posix_loadfunc(const char *procname, void *arg)
 {
     if(arg)
-        return dlsym(arg, procname);
+        // This conversion is valid in POSIX
+        return (SALAD_func_t)dlsym(arg, procname);
     return NULL;
 }
 #endif
@@ -158,21 +159,21 @@ PFN_alcCaptureSamples SALAD_alcCaptureSamples = NULL;
 PFN_alGenEffects SALAD_alGenEffects = NULL;
 PFN_alDeleteEffects SALAD_alDeleteEffects = NULL;
 PFN_alIsEffect SALAD_alIsEffect = NULL;
-PFN_alEffecti SALAD_alEffecti = NULL; 
-PFN_alEffectiv SALAD_alEffectiv = NULL; 
-PFN_alEffectf SALAD_alEffectf = NULL; 
-PFN_alEffectfv SALAD_alEffectfv = NULL; 
+PFN_alEffecti SALAD_alEffecti = NULL;
+PFN_alEffectiv SALAD_alEffectiv = NULL;
+PFN_alEffectf SALAD_alEffectf = NULL;
+PFN_alEffectfv SALAD_alEffectfv = NULL;
 PFN_alGetEffecti SALAD_alGetEffecti = NULL;
 PFN_alGetEffectiv SALAD_alGetEffectiv = NULL;
 PFN_alGetEffectf SALAD_alGetEffectf = NULL;
 PFN_alGetEffectfv SALAD_alGetEffectfv = NULL;
-PFN_alGenFilters SALAD_alGenFilters = NULL; 
+PFN_alGenFilters SALAD_alGenFilters = NULL;
 PFN_alDeleteFilters SALAD_alDeleteFilters = NULL;
 PFN_alIsFilter SALAD_alIsFilter = NULL;
-PFN_alFilteri SALAD_alFilteri = NULL; 
-PFN_alFilteriv SALAD_alFilteriv = NULL; 
-PFN_alFilterf SALAD_alFilterf = NULL; 
-PFN_alFilterfv SALAD_alFilterfv = NULL; 
+PFN_alFilteri SALAD_alFilteri = NULL;
+PFN_alFilteriv SALAD_alFilteriv = NULL;
+PFN_alFilterf SALAD_alFilterf = NULL;
+PFN_alFilterfv SALAD_alFilterfv = NULL;
 PFN_alGetFilteri SALAD_alGetFilteri = NULL;
 PFN_alGetFilteriv SALAD_alGetFilteriv = NULL;
 PFN_alGetFilterf SALAD_alGetFilterf = NULL;
@@ -201,123 +202,123 @@ int saladLoadALFunc(SALAD_loadfunc_t loadfunc, void *arg)
         return 0;
 
     /* OpenAL functions */
-    SALAD_alEnable = loadfunc("alEnable", arg);
-    SALAD_alDisable = loadfunc("alDisable", arg);
-    SALAD_alIsEnabled = loadfunc("alIsEnabled", arg);
-    SALAD_alGetString = loadfunc("alGetString", arg);
-    SALAD_alGetBooleanv = loadfunc("alGetBooleanv", arg);
-    SALAD_alGetIntegerv = loadfunc("alGetIntegerv", arg);
-    SALAD_alGetFloatv = loadfunc("alGetFloatv", arg);
-    SALAD_alGetDoublev = loadfunc("alGetDoublev", arg);
-    SALAD_alGetBoolean = loadfunc("alGetBoolean", arg);
-    SALAD_alGetInteger = loadfunc("alGetInteger", arg);
-    SALAD_alGetFloat = loadfunc("alGetFloat", arg);
-    SALAD_alGetDouble = loadfunc("alGetDouble", arg);
-    SALAD_alGetError = loadfunc("alGetError", arg);
-    SALAD_alIsExtensionPresent = loadfunc("alIsExtensionPresent", arg);
-    SALAD_alGetProcAddress = loadfunc("alGetProcAddress", arg);
-    SALAD_alGetEnumValue = loadfunc("alGetEnumValue", arg);
-    SALAD_alListenerf = loadfunc("alListenerf", arg);
-    SALAD_alListener3f = loadfunc("alListener3f", arg);
-    SALAD_alListenerfv = loadfunc("alListenerfv", arg);
-    SALAD_alListeneri = loadfunc("alListeneri", arg);
-    SALAD_alListener3i = loadfunc("alListener3i", arg);
-    SALAD_alListeneriv = loadfunc("alListeneriv", arg);
-    SALAD_alGetListenerf = loadfunc("alGetListenerf", arg);
-    SALAD_alGetListener3f = loadfunc("alGetListener3f", arg);
-    SALAD_alGetListenerfv = loadfunc("alGetListenerfv", arg);
-    SALAD_alGetListeneri = loadfunc("alGetListeneri", arg);
-    SALAD_alGetListener3i = loadfunc("alGetListener3i", arg);
-    SALAD_alGetListeneriv = loadfunc("alGetListeneriv", arg);
-    SALAD_alGenSources = loadfunc("alGenSources", arg);
-    SALAD_alDeleteSources = loadfunc("alDeleteSources", arg);
-    SALAD_alIsSource = loadfunc("alIsSource", arg);
-    SALAD_alSourcef = loadfunc("alSourcef", arg);
-    SALAD_alSource3f = loadfunc("alSource3f", arg);
-    SALAD_alSourcefv = loadfunc("alSourcefv", arg);
-    SALAD_alSourcei = loadfunc("alSourcei", arg);
-    SALAD_alSource3i = loadfunc("alSource3i", arg);
-    SALAD_alSourceiv = loadfunc("alSourceiv", arg);
-    SALAD_alGetSourcef = loadfunc("alGetSourcef", arg);
-    SALAD_alGetSource3f = loadfunc("alGetSource3f", arg);
-    SALAD_alGetSourcefv = loadfunc("alGetSourcefv", arg);
-    SALAD_alGetSourcei = loadfunc("alGetSourcei", arg);
-    SALAD_alGetSource3i = loadfunc("alGetSource3i", arg);
-    SALAD_alGetSourceiv = loadfunc("alGetSourceiv", arg);
-    SALAD_alSourcePlayv = loadfunc("alSourcePlayv", arg);
-    SALAD_alSourceStopv = loadfunc("alSourceStopv", arg);
-    SALAD_alSourceRewindv = loadfunc("alSourceRewindv", arg);
-    SALAD_alSourcePausev = loadfunc("alSourcePausev", arg);
-    SALAD_alSourcePlay = loadfunc("alSourcePlay", arg);
-    SALAD_alSourceStop = loadfunc("alSourceStop", arg);
-    SALAD_alSourceRewind = loadfunc("alSourceRewind", arg);
-    SALAD_alSourcePause = loadfunc("alSourcePause", arg);
-    SALAD_alSourceQueueBuffers = loadfunc("alSourceQueueBuffers", arg);
-    SALAD_alSourceUnqueueBuffers = loadfunc("alSourceUnqueueBuffers", arg);
-    SALAD_alGenBuffers = loadfunc("alGenBuffers", arg);
-    SALAD_alDeleteBuffers = loadfunc("alDeleteBuffers", arg);
-    SALAD_alIsBuffer = loadfunc("alIsBuffer", arg);
-    SALAD_alBufferData = loadfunc("alBufferData", arg);
-    SALAD_alBufferf = loadfunc("alBufferf", arg);
-    SALAD_alBuffer3f = loadfunc("alBuffer3f", arg);
-    SALAD_alBufferfv = loadfunc("alBufferfv", arg);
-    SALAD_alBufferi = loadfunc("alBufferi", arg);
-    SALAD_alBuffer3i = loadfunc("alBuffer3i", arg);
-    SALAD_alBufferiv = loadfunc("alBufferiv", arg);
-    SALAD_alGetBufferf = loadfunc("alGetBufferf", arg);
-    SALAD_alGetBuffer3f = loadfunc("alGetBuffer3f", arg);
-    SALAD_alGetBufferfv = loadfunc("alGetBufferfv", arg);
-    SALAD_alGetBufferi = loadfunc("alGetBufferi", arg);
-    SALAD_alGetBuffer3i = loadfunc("alGetBuffer3i", arg);
-    SALAD_alGetBufferiv = loadfunc("alGetBufferiv", arg);
+    SALAD_alEnable = (PFN_alEnable)loadfunc("alEnable", arg);
+    SALAD_alDisable = (PFN_alDisable)loadfunc("alDisable", arg);
+    SALAD_alIsEnabled = (PFN_alIsEnabled)loadfunc("alIsEnabled", arg);
+    SALAD_alGetString = (PFN_alGetString)loadfunc("alGetString", arg);
+    SALAD_alGetBooleanv = (PFN_alGetBooleanv)loadfunc("alGetBooleanv", arg);
+    SALAD_alGetIntegerv = (PFN_alGetIntegerv)loadfunc("alGetIntegerv", arg);
+    SALAD_alGetFloatv = (PFN_alGetFloatv)loadfunc("alGetFloatv", arg);
+    SALAD_alGetDoublev = (PFN_alGetDoublev)loadfunc("alGetDoublev", arg);
+    SALAD_alGetBoolean = (PFN_alGetBoolean)loadfunc("alGetBoolean", arg);
+    SALAD_alGetInteger = (PFN_alGetInteger)loadfunc("alGetInteger", arg);
+    SALAD_alGetFloat = (PFN_alGetFloat)loadfunc("alGetFloat", arg);
+    SALAD_alGetDouble = (PFN_alGetDouble)loadfunc("alGetDouble", arg);
+    SALAD_alGetError = (PFN_alGetError)loadfunc("alGetError", arg);
+    SALAD_alIsExtensionPresent = (PFN_alIsExtensionPresent)loadfunc("alIsExtensionPresent", arg);
+    SALAD_alGetProcAddress = (PFN_alGetProcAddress)loadfunc("alGetProcAddress", arg);
+    SALAD_alGetEnumValue = (PFN_alGetEnumValue)loadfunc("alGetEnumValue", arg);
+    SALAD_alListenerf = (PFN_alListenerf)loadfunc("alListenerf", arg);
+    SALAD_alListener3f = (PFN_alListener3f)loadfunc("alListener3f", arg);
+    SALAD_alListenerfv = (PFN_alListenerfv)loadfunc("alListenerfv", arg);
+    SALAD_alListeneri = (PFN_alListeneri)loadfunc("alListeneri", arg);
+    SALAD_alListener3i = (PFN_alListener3i)loadfunc("alListener3i", arg);
+    SALAD_alListeneriv = (PFN_alListeneriv)loadfunc("alListeneriv", arg);
+    SALAD_alGetListenerf = (PFN_alGetListenerf)loadfunc("alGetListenerf", arg);
+    SALAD_alGetListener3f = (PFN_alGetListener3f)loadfunc("alGetListener3f", arg);
+    SALAD_alGetListenerfv = (PFN_alGetListenerfv)loadfunc("alGetListenerfv", arg);
+    SALAD_alGetListeneri = (PFN_alGetListeneri)loadfunc("alGetListeneri", arg);
+    SALAD_alGetListener3i = (PFN_alGetListener3i)loadfunc("alGetListener3i", arg);
+    SALAD_alGetListeneriv = (PFN_alGetListeneriv)loadfunc("alGetListeneriv", arg);
+    SALAD_alGenSources = (PFN_alGenSources)loadfunc("alGenSources", arg);
+    SALAD_alDeleteSources = (PFN_alDeleteSources)loadfunc("alDeleteSources", arg);
+    SALAD_alIsSource = (PFN_alIsSource)loadfunc("alIsSource", arg);
+    SALAD_alSourcef = (PFN_alSourcef)loadfunc("alSourcef", arg);
+    SALAD_alSource3f = (PFN_alSource3f)loadfunc("alSource3f", arg);
+    SALAD_alSourcefv = (PFN_alSourcefv)loadfunc("alSourcefv", arg);
+    SALAD_alSourcei = (PFN_alSourcei)loadfunc("alSourcei", arg);
+    SALAD_alSource3i = (PFN_alSource3i)loadfunc("alSource3i", arg);
+    SALAD_alSourceiv = (PFN_alSourceiv)loadfunc("alSourceiv", arg);
+    SALAD_alGetSourcef = (PFN_alGetSourcef)loadfunc("alGetSourcef", arg);
+    SALAD_alGetSource3f = (PFN_alGetSource3f)loadfunc("alGetSource3f", arg);
+    SALAD_alGetSourcefv = (PFN_alGetSourcefv)loadfunc("alGetSourcefv", arg);
+    SALAD_alGetSourcei = (PFN_alGetSourcei)loadfunc("alGetSourcei", arg);
+    SALAD_alGetSource3i = (PFN_alGetSource3i)loadfunc("alGetSource3i", arg);
+    SALAD_alGetSourceiv = (PFN_alGetSourceiv)loadfunc("alGetSourceiv", arg);
+    SALAD_alSourcePlayv = (PFN_alSourcePlayv)loadfunc("alSourcePlayv", arg);
+    SALAD_alSourceStopv = (PFN_alSourceStopv)loadfunc("alSourceStopv", arg);
+    SALAD_alSourceRewindv = (PFN_alSourceRewindv)loadfunc("alSourceRewindv", arg);
+    SALAD_alSourcePausev = (PFN_alSourcePausev)loadfunc("alSourcePausev", arg);
+    SALAD_alSourcePlay = (PFN_alSourcePlay)loadfunc("alSourcePlay", arg);
+    SALAD_alSourceStop = (PFN_alSourceStop)loadfunc("alSourceStop", arg);
+    SALAD_alSourceRewind = (PFN_alSourceRewind)loadfunc("alSourceRewind", arg);
+    SALAD_alSourcePause = (PFN_alSourcePause)loadfunc("alSourcePause", arg);
+    SALAD_alSourceQueueBuffers = (PFN_alSourceQueueBuffers)loadfunc("alSourceQueueBuffers", arg);
+    SALAD_alSourceUnqueueBuffers = (PFN_alSourceUnqueueBuffers)loadfunc("alSourceUnqueueBuffers", arg);
+    SALAD_alGenBuffers = (PFN_alGenBuffers)loadfunc("alGenBuffers", arg);
+    SALAD_alDeleteBuffers = (PFN_alDeleteBuffers)loadfunc("alDeleteBuffers", arg);
+    SALAD_alIsBuffer = (PFN_alIsBuffer)loadfunc("alIsBuffer", arg);
+    SALAD_alBufferData = (PFN_alBufferData)loadfunc("alBufferData", arg);
+    SALAD_alBufferf = (PFN_alBufferf)loadfunc("alBufferf", arg);
+    SALAD_alBuffer3f = (PFN_alBuffer3f)loadfunc("alBuffer3f", arg);
+    SALAD_alBufferfv = (PFN_alBufferfv)loadfunc("alBufferfv", arg);
+    SALAD_alBufferi = (PFN_alBufferi)loadfunc("alBufferi", arg);
+    SALAD_alBuffer3i = (PFN_alBuffer3i)loadfunc("alBuffer3i", arg);
+    SALAD_alBufferiv = (PFN_alBufferiv)loadfunc("alBufferiv", arg);
+    SALAD_alGetBufferf = (PFN_alGetBufferf)loadfunc("alGetBufferf", arg);
+    SALAD_alGetBuffer3f = (PFN_alGetBuffer3f)loadfunc("alGetBuffer3f", arg);
+    SALAD_alGetBufferfv = (PFN_alGetBufferfv)loadfunc("alGetBufferfv", arg);
+    SALAD_alGetBufferi = (PFN_alGetBufferi)loadfunc("alGetBufferi", arg);
+    SALAD_alGetBuffer3i = (PFN_alGetBuffer3i)loadfunc("alGetBuffer3i", arg);
+    SALAD_alGetBufferiv = (PFN_alGetBufferiv)loadfunc("alGetBufferiv", arg);
 
     /* OpenAL context functions */
-    SALAD_alcCreateContext = loadfunc("alcCreateContext", arg);
-    SALAD_alcMakeContextCurrent = loadfunc("alcMakeContextCurrent", arg);
-    SALAD_alcProcessContext = loadfunc("alcProcessContext", arg);
-    SALAD_alcSuspendContext = loadfunc("alcSuspendContext", arg);
-    SALAD_alcDestroyContext = loadfunc("alcDestroyContext", arg);
-    SALAD_alcGetCurrentContext = loadfunc("alcGetCurrentContext", arg);
-    SALAD_alcGetContextsDevice = loadfunc("alcGetContextsDevice", arg);
-    SALAD_alcOpenDevice = loadfunc("alcOpenDevice", arg);
-    SALAD_alcCloseDevice = loadfunc("alcCloseDevice", arg);
-    SALAD_alcGetError = loadfunc("alcGetError", arg);
-    SALAD_alcIsExtensionPresent = loadfunc("alcIsExtensionPresent", arg);
-    SALAD_alcGetProcAddress = loadfunc("alcGetProcAddress", arg);
-    SALAD_alcGetEnumValue = loadfunc("alcGetEnumValue", arg);
-    SALAD_alcGetString = loadfunc("alcGetString", arg);
-    SALAD_alcGetIntegerv = loadfunc("alcGetIntegerv", arg);
-    SALAD_alcCaptureOpenDevice = loadfunc("alcCaptureOpenDevice", arg);
-    SALAD_alcCaptureCloseDevice = loadfunc("alcCaptureCloseDevice", arg);
-    SALAD_alcCaptureStart = loadfunc("alcCaptureStart", arg);
-    SALAD_alcCaptureStop = loadfunc("alcCaptureStop", arg);
-    SALAD_alcCaptureSamples = loadfunc("alcCaptureSamples", arg);
+    SALAD_alcCreateContext = (PFN_alcCreateContext)loadfunc("alcCreateContext", arg);
+    SALAD_alcMakeContextCurrent = (PFN_alcMakeContextCurrent)loadfunc("alcMakeContextCurrent", arg);
+    SALAD_alcProcessContext = (PFN_alcProcessContext)loadfunc("alcProcessContext", arg);
+    SALAD_alcSuspendContext = (PFN_alcSuspendContext)loadfunc("alcSuspendContext", arg);
+    SALAD_alcDestroyContext = (PFN_alcDestroyContext)loadfunc("alcDestroyContext", arg);
+    SALAD_alcGetCurrentContext = (PFN_alcGetCurrentContext)loadfunc("alcGetCurrentContext", arg);
+    SALAD_alcGetContextsDevice = (PFN_alcGetContextsDevice)loadfunc("alcGetContextsDevice", arg);
+    SALAD_alcOpenDevice = (PFN_alcOpenDevice)loadfunc("alcOpenDevice", arg);
+    SALAD_alcCloseDevice = (PFN_alcCloseDevice)loadfunc("alcCloseDevice", arg);
+    SALAD_alcGetError = (PFN_alcGetError)loadfunc("alcGetError", arg);
+    SALAD_alcIsExtensionPresent = (PFN_alcIsExtensionPresent)loadfunc("alcIsExtensionPresent", arg);
+    SALAD_alcGetProcAddress = (PFN_alcGetProcAddress)loadfunc("alcGetProcAddress", arg);
+    SALAD_alcGetEnumValue = (PFN_alcGetEnumValue)loadfunc("alcGetEnumValue", arg);
+    SALAD_alcGetString = (PFN_alcGetString)loadfunc("alcGetString", arg);
+    SALAD_alcGetIntegerv = (PFN_alcGetIntegerv)loadfunc("alcGetIntegerv", arg);
+    SALAD_alcCaptureOpenDevice = (PFN_alcCaptureOpenDevice)loadfunc("alcCaptureOpenDevice", arg);
+    SALAD_alcCaptureCloseDevice = (PFN_alcCaptureCloseDevice)loadfunc("alcCaptureCloseDevice", arg);
+    SALAD_alcCaptureStart = (PFN_alcCaptureStart)loadfunc("alcCaptureStart", arg);
+    SALAD_alcCaptureStop = (PFN_alcCaptureStop)loadfunc("alcCaptureStop", arg);
+    SALAD_alcCaptureSamples = (PFN_alcCaptureSamples)loadfunc("alcCaptureSamples", arg);
 
     /* ALC_EXT_EFX functions */
     /* These functions are NOT checked if SALAD_PARANOID is defined
      * because extension presence checking is on user code */
-    SALAD_alGenEffects = loadfunc("alGenEffects", arg);
-    SALAD_alDeleteEffects = loadfunc("alDeleteEffects", arg);
-    SALAD_alIsEffect = loadfunc("alIsEffect", arg);
-    SALAD_alEffecti = loadfunc("alEffecti", arg); 
-    SALAD_alEffectiv = loadfunc("alEffectiv", arg); 
-    SALAD_alEffectf = loadfunc("alEffectf", arg); 
-    SALAD_alEffectfv = loadfunc("alEffectfv", arg); 
-    SALAD_alGetEffecti = loadfunc("alGetEffecti", arg);
-    SALAD_alGetEffectiv = loadfunc("alGetEffectiv", arg);
-    SALAD_alGetEffectf = loadfunc("alGetEffectf", arg);
-    SALAD_alGetEffectfv = loadfunc("alGetEffectfv", arg);
-    SALAD_alGenFilters = loadfunc("alGenFilters", arg); 
-    SALAD_alDeleteFilters = loadfunc("alDeleteFilters", arg);
-    SALAD_alIsFilter = loadfunc("alIsFilter", arg);
-    SALAD_alFilteri = loadfunc("alFilteri", arg); 
-    SALAD_alFilteriv = loadfunc("alFilteriv", arg); 
-    SALAD_alFilterf = loadfunc("alFilterf", arg); 
-    SALAD_alFilterfv = loadfunc("alFilterfv", arg); 
-    SALAD_alGetFilteri = loadfunc("alGetFilteri", arg);
-    SALAD_alGetFilteriv = loadfunc("alGetFilteriv", arg);
-    SALAD_alGetFilterf = loadfunc("alGetFilterf", arg);
-    SALAD_alGetFilterfv = loadfunc("alGetFilterfv", arg);
+    SALAD_alGenEffects = (PFN_alGenEffects)loadfunc("alGenEffects", arg);
+    SALAD_alDeleteEffects = (PFN_alDeleteEffects)loadfunc("alDeleteEffects", arg);
+    SALAD_alIsEffect = (PFN_alIsEffect)loadfunc("alIsEffect", arg);
+    SALAD_alEffecti = (PFN_alEffecti)loadfunc("alEffecti", arg);
+    SALAD_alEffectiv = (PFN_alEffectiv)loadfunc("alEffectiv", arg);
+    SALAD_alEffectf = (PFN_alEffectf)loadfunc("alEffectf", arg);
+    SALAD_alEffectfv = (PFN_alEffectfv)loadfunc("alEffectfv", arg);
+    SALAD_alGetEffecti = (PFN_alGetEffecti)loadfunc("alGetEffecti", arg);
+    SALAD_alGetEffectiv = (PFN_alGetEffectiv)loadfunc("alGetEffectiv", arg);
+    SALAD_alGetEffectf = (PFN_alGetEffectf)loadfunc("alGetEffectf", arg);
+    SALAD_alGetEffectfv = (PFN_alGetEffectfv)loadfunc("alGetEffectfv", arg);
+    SALAD_alGenFilters = (PFN_alGenFilters)loadfunc("alGenFilters", arg);
+    SALAD_alDeleteFilters = (PFN_alDeleteFilters)loadfunc("alDeleteFilters", arg);
+    SALAD_alIsFilter = (PFN_alIsFilter)loadfunc("alIsFilter", arg);
+    SALAD_alFilteri = (PFN_alFilteri)loadfunc("alFilteri", arg);
+    SALAD_alFilteriv = (PFN_alFilteriv)loadfunc("alFilteriv", arg);
+    SALAD_alFilterf = (PFN_alFilterf)loadfunc("alFilterf", arg);
+    SALAD_alFilterfv = (PFN_alFilterfv)loadfunc("alFilterfv", arg);
+    SALAD_alGetFilteri = (PFN_alGetFilteri)loadfunc("alGetFilteri", arg);
+    SALAD_alGetFilteriv = (PFN_alGetFilteriv)loadfunc("alGetFilteriv", arg);
+    SALAD_alGetFilterf = (PFN_alGetFilterf)loadfunc("alGetFilterf", arg);
+    SALAD_alGetFilterfv = (PFN_alGetFilterfv)loadfunc("alGetFilterfv", arg);
 
 #if defined(SALAD_PARANOID)
     if(!SALAD_alEnable)
