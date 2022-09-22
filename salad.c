@@ -51,9 +51,9 @@ static SALAD_func_t win32_loadfunc(const char *procname, void *arg)
 #include <dlfcn.h>
 
 #if defined(__APPLE__)
-#define OPENAL_LIBNAME "libopenal.dylib"
+static const char *OPENAL_LIBNAME[] = {"libopenal.dylib"};
 #else
-#define OPENAL_LIBNAME "libopenal.so"
+static const char *OPENAL_LIBNAME[] = {"libopenal.so.1", "libopenal.so"};
 #endif
 
 static SALAD_func_t posix_loadfunc(const char *procname, void *arg)
@@ -188,8 +188,15 @@ int saladLoadAL(void)
         return saladLoadALFunc(win32_loadfunc, module);
     return 0;
 #elif defined(_POSIX)
-    if((module = dlopen(OPENAL_LIBNAME, RTLD_LAZY)))
-        return saladLoadALFunc(posix_loadfunc, module);
+    size_t i;
+    for(i = 0; i < (sizeof(OPENAL_LIBNAME) / sizeof(*OPENAL_LIBNAME)); i++) {
+        if((module = dlopen(OPENAL_LIBNAME[i], RTLD_LAZY))) {
+            int rc = saladLoadALFunc(posix_loadfunc, module);
+            if (rc) {
+                return rc;
+            }
+        }
+    }
     return 0;
 #endif
 
