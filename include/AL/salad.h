@@ -66,13 +66,18 @@ typedef unsigned int        salad_uint32_t;
 #endif
 
 /**
+ * A generic function pointer type, used as a return type of the loader function.
+ */
+typedef void (*SALAD_func_t)();
+
+/**
  * A function pointer responsible for loading OpenAL
  * functions from a dynamically linked library.
  * @param procname  Function name.
  * @param arg       Optional argument.
  * @return          Function pointer or NULL.
  */
-typedef void *(SALAD_APIENTRY *SALAD_loadfunc_t)(const char *procname, void *arg);
+typedef SALAD_func_t (SALAD_APIENTRY *SALAD_loadfunc_t)(const char *procname, void *arg);
 
 /**
  * Loads OpenAL functions using default paths to libraries.
