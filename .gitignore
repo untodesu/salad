@@ -1,2 +1,6 @@
-.vscode/
-build/
+/.vscode/
+/build/
+*.dylib
+*.dll
+*.so.1
+*.so

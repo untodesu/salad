@@ -96,4 +96,4 @@ SALAD_EXTERN int saladLoadALdefault(void);
  */
 SALAD_EXTERN int saladLoadALfunc(SALAD_loadfunc_type loadfunc, void *arg);
 
-#endif
+#endif /* AL_SALAD_H */

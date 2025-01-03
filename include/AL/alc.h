@@ -51,35 +51,35 @@ struct ALCcontext;
 typedef struct ALCdevice ALCdevice;
 typedef struct ALCcontext ALCcontext;
 
-#define ALC_INVALID 0x0000
-#define ALC_FALSE   0x0000
-#define ALC_TRUE    0x0001
+#define ALC_INVALID (0x0000)
+#define ALC_FALSE   (0x0000)
+#define ALC_TRUE    (0x0001)
 
-#define ALC_ALL_ATTRIBUTES                      0x1003
-#define ALC_ALL_DEVICES_SPECIFIER               0x1013
-#define ALC_ATTRIBUTES_SIZE                     0x1002
-#define ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER    0x0311
-#define ALC_CAPTURE_DEVICE_SPECIFIER            0x0310
-#define ALC_CAPTURE_SAMPLES                     0x0312
-#define ALC_DEFAULT_ALL_DEVICES_SPECIFIER       0x1012
-#define ALC_DEFAULT_DEVICE_SPECIFIER            0x1004
-#define ALC_DEVICE_SPECIFIER                    0x1005
-#define ALC_ENUMERATE_ALL_EXT                   0x0001
-#define ALC_EXT_CAPTURE                         0x0001
-#define ALC_EXTENSIONS                          0x1006
-#define ALC_FREQUENCY                           0x1007
-#define ALC_INVALID_CONTEXT                     0xA002
-#define ALC_INVALID_DEVICE                      0xA001
-#define ALC_INVALID_ENUM                        0xA003
-#define ALC_INVALID_VALUE                       0xA004
-#define ALC_MAJOR_VERSION                       0x1000
-#define ALC_MINOR_VERSION                       0x1001
-#define ALC_MONO_SOURCES                        0x1010
-#define ALC_NO_ERROR                            0x0000
-#define ALC_OUT_OF_MEMORY                       0xA005
-#define ALC_REFRESH                             0x1008
-#define ALC_STEREO_SOURCES                      0x1011
-#define ALC_SYNC                                0x1009
+#define ALC_ALL_ATTRIBUTES                      (0x1003)
+#define ALC_ALL_DEVICES_SPECIFIER               (0x1013)
+#define ALC_ATTRIBUTES_SIZE                     (0x1002)
+#define ALC_CAPTURE_DEFAULT_DEVICE_SPECIFIER    (0x0311)
+#define ALC_CAPTURE_DEVICE_SPECIFIER            (0x0310)
+#define ALC_CAPTURE_SAMPLES                     (0x0312)
+#define ALC_DEFAULT_ALL_DEVICES_SPECIFIER       (0x1012)
+#define ALC_DEFAULT_DEVICE_SPECIFIER            (0x1004)
+#define ALC_DEVICE_SPECIFIER                    (0x1005)
+#define ALC_ENUMERATE_ALL_EXT                   (0x0001)
+#define ALC_EXT_CAPTURE                         (0x0001)
+#define ALC_EXTENSIONS                          (0x1006)
+#define ALC_FREQUENCY                           (0x1007)
+#define ALC_INVALID_CONTEXT                     (0xA002)
+#define ALC_INVALID_DEVICE                      (0xA001)
+#define ALC_INVALID_ENUM                        (0xA003)
+#define ALC_INVALID_VALUE                       (0xA004)
+#define ALC_MAJOR_VERSION                       (0x1000)
+#define ALC_MINOR_VERSION                       (0x1001)
+#define ALC_MONO_SOURCES                        (0x1010)
+#define ALC_NO_ERROR                            (0x0000)
+#define ALC_OUT_OF_MEMORY                       (0xA005)
+#define ALC_REFRESH                             (0x1008)
+#define ALC_STEREO_SOURCES                      (0x1011)
+#define ALC_SYNC                                (0x1009)
 
 typedef ALCboolean(ALC_APIENTRY *PFN_alcCaptureCloseDevice)(ALCdevice *device);
 typedef ALCboolean(ALC_APIENTRY *PFN_alcCloseDevice)(ALCdevice *device);
@@ -144,4 +144,4 @@ SALAD_EXTERN PFN_alcSuspendContext      SALAD_alcSuspendContext;
 #define alcProcessContext       SALAD_alcProcessContext
 #define alcSuspendContext       SALAD_alcSuspendContext
 
-#endif
+#endif /* AL_ALC_H */
