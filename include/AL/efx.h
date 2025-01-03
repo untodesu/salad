@@ -25,7 +25,6 @@
  */
 #ifndef AL_EFX_H
 #define AL_EFX_H
-#define __efx_h_
 #include <AL/al.h>
 
 #define ALC_EXT_EFX_NAME "ALC_EXT_EFX"
