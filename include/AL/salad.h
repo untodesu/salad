@@ -1,7 +1,6 @@
 /*
- * salad.h
- * Created: 2021-07-26, 21:51:57.
- * Copyright (C) 2021, Kirill GPRB. All rights reserved.
+ * salad.h - OpenAL loader declarations
+ * Copyright (C) 2021-2025, Kirill Dmitrievich
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -26,15 +25,18 @@
  */
 #ifndef AL_SALAD_H
 #define AL_SALAD_H 1
+#include <float.h>
+
+#define SALAD_VERSION_MAJOR 0
+#define SALAD_VERSION_MINOR 0
+#define SALAD_VERSION_PATCH 2
 
 #if defined(_MSC_VER)
-#define SALAD_APIENTRY __cdecl
-#define SALAD_ALX_APIENTRY __cdecl
-#define SALAD_ALX_API __declspec(dllimport)
+#define SALAD_APIENTRY      __cdecl
+#define SALAD_ALX_APIENTRY  __cdecl
 #else
 #define SALAD_APIENTRY
 #define SALAD_ALX_APIENTRY
-#define SALAD_ALX_API
 #endif
 
 #if defined(__cplusplus)
@@ -43,54 +45,55 @@
 #define SALAD_EXTERN extern
 #endif
 
-typedef float               salad_float32_t;
-typedef double              salad_float64_t;
-typedef signed char         salad_int8_t;
-typedef signed short        salad_int16_t;
-typedef unsigned char       salad_uint8_t;
-typedef unsigned short      salad_uint16_t;
+typedef float               salad_float32_type;
+typedef double              salad_float64_type;
+
+typedef signed char         salad_int8_type;
+typedef signed short        salad_int16_type;
+
+typedef unsigned char       salad_uint8_type;
+typedef unsigned short      salad_uint16_type;
+
 #if (defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L) || defined(__GNUC__)
 #include <stdint.h>
-typedef int32_t             salad_int32_t;
-typedef uint32_t            salad_uint32_t;
+typedef int32_t             salad_int32_type;
+typedef uint32_t            salad_uint32_type;
 #elif defined(__cplusplus) && __cplusplus >= 201103L
 #include <cstdint>
-typedef std::int32_t        salad_int32_t;
-typedef std::uint32_t       salad_uint32_t;
+typedef std::int32_t        salad_int32_type;
+typedef std::uint32_t       salad_uint32_type;
 #elif defined(_WIN32)
-typedef __int32             salad_int32_t;
-typedef unsigned __int32    salad_uint32_t;
+typedef __int32             salad_int32_type;
+typedef unsigned __int32    salad_uint32_type;
 #else
-typedef int                 salad_int32_t;
-typedef unsigned int        salad_uint32_t;
+typedef int                 salad_int32_type;
+typedef unsigned int        salad_uint32_type;
 #endif
 
 /**
- * A generic function pointer type, used as a return type of the loader function.
+ * A pointer to a function responsible for resolving a function
+ * with a specific name from the module loaded by SALAD or by the user
+ * @param procname  Function name
+ * @param arg       Optional implementation-used argument
+ * @returns         A resolved function pointer on success, NULL on failure
  */
-typedef void (*SALAD_func_t)();
+typedef void* (SALAD_APIENTRY *SALAD_loadfunc_type)(const char *procname, void *arg);
 
 /**
- * A function pointer responsible for loading OpenAL
- * functions from a dynamically linked library.
- * @param procname  Function name.
- * @param arg       Optional argument.
- * @return          Function pointer or NULL.
+ * Loads OpenAL and extensions using implementation-defined
+ * dynamic library paths and using implementation-defined API
+ * @returns         Zero on failure, non-zero on success
  */
-typedef SALAD_func_t (SALAD_APIENTRY *SALAD_loadfunc_t)(const char *procname, void *arg);
+SALAD_EXTERN int saladLoadALdefault(void);
 
 /**
- * Loads OpenAL functions using default paths to libraries.
- * @return          Non-zero on success.
+ * Loads OpenAL and extensions using a user-provided load
+ * function; Initially this was used to mate Source SDK's dynamic
+ * linking API and OpenAL but the entire project went nowhere
+ * @param loadfunc  User-provided load function
+ * @param arg       Optional argument for the function
+ * @returns         Zero on failure, non-zero on success
  */
-SALAD_EXTERN int saladLoadAL(void);
-
-/**
- * Loads OpenAL functions using a custom load function.
- * @param loadfunc  Load function (GetProcAddress).
- * @param arg       Optional argument (pass NULL if unused).
- * @return          Non-zero on success.
- */
-SALAD_EXTERN int saladLoadALFunc(SALAD_loadfunc_t loadfunc, void *arg);
+SALAD_EXTERN int saladLoadALfunc(SALAD_loadfunc_type loadfunc, void *arg);
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * sine.c - generate a 440 Hz sine wave using OpenAL
+ * mains.c - simulate mains hum with OpenAL
  * Copyright (C) 2021-2024, Kirill Dmitrievich
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,8 +40,20 @@ typedef ALshort snd_t[SNDSIZE];
 static void generate_snd(snd_t sndbuffer)
 {
     int n;
+    double s;
+
     for(n = 0; n < SNDSIZE; ++n) {
-        sndbuffer[n] = (ALshort)(sin(2.0 * 3.1415 * 440 * n / SNDSIZE) * SHRT_MAX);
+        s = 0.0;
+        s += 1.0 * sin(2.0 * 3.1415 * 50.0  * n / SNDSIZE);
+        s += 2.0 * sin(2.0 * 3.1415 * 100.0 * n / SNDSIZE);
+        s += 1.0 * sin(2.0 * 3.1415 * 200.0 * n / SNDSIZE);
+        s += 0.5 * sin(2.0 * 3.1415 * 400.0 * n / SNDSIZE);
+
+        /* Clamp into the correct range */
+        if(s < -1.0) s = -1.0;
+        if(s > +1.0) s = +1.0;
+
+        sndbuffer[n] = (ALshort)(s * SHRT_MAX);
     }
 }
 

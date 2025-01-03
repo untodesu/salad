@@ -1,52 +1,57 @@
 # SALAD
 > _Nice hustle, tons-o-fun! Next time, eat a salad!_
 
-SALAD is an OpenAL loader library which is made specifically to avoid _any_ licensing issues caused by OpenAL-soft being licensed under LGPL.  
+SALAD is an OpenAL loader which is made out of frustration with an obvious lack of permissively-licensed OpenAL loaders in the software/game development world. SALAD and all the headers are licensed under Simplified BSD License (see [LICENSE](LICENSE) for the full license text)  
 
-SALAD is named after [GLAD](https://github.com/Dav1dde/glad) just because I thought it would be funny.  
+### Why SALAD?
+Because it's funny. The library is named as an omage to an existing OpenGL loader [GLAD](https://github.com/Dav1dde/glad); if you compare the two loaders, using both to load their respective API functions is very similar and that's intentional.  
 
-## Usage
-In order to use SALAD you need a working ANSI C compiler with extensions (Visual C/C++ and GNU C extensions are supported so far).
+# Usage
+## Prerequisites
+* A working ISO C90 (ANSI C89) compiler  
+* A system installation of OpenAL or an OpenAL DLL module  
 
-#### Via copying files
-You can just copy files in yours source tree, then add `salad.c` as a source and append a new directory to the include path.
+## Compiling directly
+* Just copy all the headers and `salad.c` into your project's source tree and include them in the build script; everything should world out of the box;  
+* Make sure to comply with license terms (at least put the license text somewhere, I guess);  
 
-#### Via CMake and Git submodules
-1. `git submodule add https://github.com/undnull/salad.git`
-2. `add_subdirectory(salad)`
-3. OPTIONAL: `set(SALAD_PARANOID OFF CACHE BOOL "" FORCE)`
-4. OPTIONAL: `set(SALAD_EXAMPLES OFF CACHE BOOL "" FORCE)`
-5. `target_link_libraries(my_engine salad)`
+## Using a CMake subdirectory
 
-## Licensing
-I wrote all the headers (myself with a bit of help from regular expressions) based on OpenAL-soft ones but using SALAD's header. So the entirety of this repo is licensed under Simplified BSD license (see [LICENSE](LICENSE) for details).
+```cmake
+add_subdirectory(salad)
+target_link_libraries(myproject PRIVATE salad)
+```
 
-## Abstract examples
-#### Generic C example
+## Using default DLL paths
+
 ```c
 #include <AL/al.h>
 #include <AL/alc.h>
 #include <AL/salad.h>
-#include <stddef.h>
 
 int main(void)
 {
-    if(!saladLoadAL())
+    if(!saladLoadALdefault())
         return 1;
-    
-    ALCdevice *dev = alcOpenDevice(NULL);
-    // ....
+
+    ALCdevice *device = alcOpenDevice(NULL);
+
+    /* ... */
 
     return 0;
 }
 ```
 
-#### Source SDK
-I was writing this in order to implement a better sound system for my Source Engine mod/game so this one is probably reasonable:
-```cpp
+## Using a custom DLL loader (Source SDK)
+Initially I created the loader to integrate with Source SDK, so this example might be relevant for those who want to do the same with a better chance of success without burning out:  
+
+```c++
+// In the precompiled header
 #include "AL/al.h"
 #include "AL/alc.h"
 #include "AL/salad.h"
+
+// In the C++ source
 #include "tier1/interface.h"
 
 static CDllDemandLoader al_dll("OpenAL32");
@@ -56,9 +61,9 @@ static void *SALAD_LoadFunc(const char *procname, void *arg)
     return al_dll.GetProcAddress(procname);
 }
 
-bool InitSomething()
+bool InitSomething(void)
 {
-    if(!saladLoadALFunc(SALAD_LoadFunc, NULL)) {
+    if(!saladLoadALfunc(&SALAD_LoadFunc, NULL)) {
         // Crash the game?
         return false;
     }

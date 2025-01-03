@@ -1,9 +1,11 @@
-function(add_salad_example target)
-    add_executable(${target} "${CMAKE_CURRENT_LIST_DIR}/${target}.c")
-    target_link_libraries(${target} salad)
-    if(NOT MSVC)
-        target_link_libraries(${target} m)
-    endif()
-endfunction()
+add_executable(mains "${CMAKE_CURRENT_LIST_DIR}/mains.c")
+target_link_libraries(mains PRIVATE salad)
 
-add_salad_example(sine)
+add_executable(sine "${CMAKE_CURRENT_LIST_DIR}/sine.c")
+target_link_libraries(sine PRIVATE salad)
+
+if(NOT MSVC)
+    # Ensure every example target links with
+    # the math library on all POSIX environments
+    link_libraries(m)
+endif()
